@@ -11,7 +11,7 @@ On top of your page/index/bootstrap/kernel... (on very top of your app)
 include_once 'navigationTracker.php';
 $nav = new navigationTracker();
 
-Before end of </body>
+Before end of body
 =========
 <?php echo $nav->getScript('<path to>/tracker.php'); ?>
 
