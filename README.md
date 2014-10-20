@@ -2,18 +2,18 @@ easytrack
 =========
 
 Fast use:
-=========
+-----------
 Edit the exemple/tracker.php, with your database's host/db/user/password
 Can change table's name, filter etc...
 
 On top of your page/index/bootstrap/kernel... (on very top of your app)
-=========
+-----------
 include_once 'navigationTracker.php';
 
 $nav = new navigationTracker();
 
 Before end of body
-=========
+-----------
 <?php echo $nav->getScript('<path to>/tracker.php'); ?>
 
 That's all !
