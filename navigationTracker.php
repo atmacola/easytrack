@@ -29,7 +29,7 @@
  * @package    atmacola/easytrack
  * @author     Ludovic Ganée <www.ludo-portfolio.fr>
  * @license    http://www.gnu.org/licenses/
- * @version    1.2
+ * @version    1.2.1
  */
 
 class navigationTracker
@@ -329,18 +329,12 @@ class navigationTracker
 			$page = $this->getPageId(htmlspecialchars($this->page));
 			$prevpage = $this->getPageId(htmlspecialchars($this->prevpage));
 			
-			$sql = "INSERT INTO `".$this->table."`(`id`, `ip`, `date`, `page`, `navigator`, `language`, `prevpage`, `latency`) 
-					VALUES (null,
-						".$ip.",
-						'".date("Y-m-d H:i:s")."',
-						".$page.",
-						".$navigator.",
-						".$language.",
-						".$prevpage.",
-						".$this->getLoadingTime()."
-					)";
-			$req = $this->db->exec($sql);
-			return $req;
+			$req = $this->db->prepare("INSERT INTO `".$this->table."`
+					(`id`, `ip`, `date`, `page`, `navigator`, `language`, `prevpage`, `latency`) 
+					VALUES (null,?,?,?,?,?,?,?)");
+			$array = array($ip, date("Y-m-d H:i:s"), $page, $navigator, $language, $prevpage, $this->getLoadingTime());
+			
+			return $req->execute($array);
 		}
 		else{
 			return false;
@@ -392,6 +386,7 @@ class navigationTracker
 	 * @return number
 	 */
 	private function find($name, $haveAShortName){
+		$name = addslashes($name);
 		if (isset($_SESSION['track_'.$name])) $result = $_SESSION['track_'.$name];
 		else {
 			// Search for this entry
@@ -433,6 +428,7 @@ class navigationTracker
 	 * @return mixed
 	 */
 	private function getPageId($url){
+		$url = addslashes($url);
 		$sql = "SELECT `id` FROM `".$this->table."_page` WHERE `page` LIKE '".$url."' LIMIT 1";
 		$req = $this->db->prepare($sql);
 		$req->execute();
