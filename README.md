@@ -9,6 +9,7 @@ Can change table's name, filter etc...
 On top of your page/index/bootstrap/kernel... (on very top of your app)
 =========
 include_once 'navigationTracker.php';
+
 $nav = new navigationTracker();
 
 Before end of body
